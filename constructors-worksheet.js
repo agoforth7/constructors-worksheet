@@ -65,15 +65,13 @@ console.assert(gossiper.logSecret() === secret);
 // The Safe constructor should take two arguments. The first argument can be any piece of data to keep safe. This must be stored using a private variable like you did with KeepSecret. The second argument to the Safe constructor should be an instance of Key that you need to store it privately as well.
 // Add a function to the Safe prototype called unlock that takes an instance of Key as the first argument. If the key matches the key that was used to create the Safe; then return the secret data.
 
-function Key (combo) {
-	this.combo = combo;
+function Key () {
+	
 };
 
-function Safe (sensitive, combo) {
-	var keep = sensitive;
-	this.combo = combo;
-	this.unlock = function (key) {
-		if (key.combo === this.combo) {
+function Safe (sensitive, key) {
+	this.unlock = function (testKey) {
+		if (key === testKey) {
 			return sensitive;
 		}
 	}
@@ -81,14 +79,14 @@ function Safe (sensitive, combo) {
 
 var sensitive = "shhhhh!";
 
-var rightKey = new Key(5);
+var rightKey = new Key();
 
-var wrongKey = new Key(7);
+var wrongKey = new Key();
 
-var anotherKey = new Key(9);
+var anotherKey = new Key();
 
 var safe = new Safe(sensitive, rightKey);
-safe.combo = 5;
+
 
 console.assert(safe.unlock(wrongKey) !== sensitive);
 console.assert(safe.unlock(rightKey) === sensitive);
